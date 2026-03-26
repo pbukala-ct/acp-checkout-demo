@@ -1,0 +1,494 @@
+{
+  "info": {
+    "_postman_id": "53e438d2-c0a9-4b14-af7a-3895a14d954f",
+    "name": "Agentic Checkout Protocol",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "3587261"
+  },
+  "item": [
+    {
+      "name": "Authorization",
+      "item": [
+        {
+          "name": "Obtain access token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "tests[\"Status code is 200\"] = responseCode.code === 200;",
+                  "var data = JSON.parse(responseBody);",
+                  "if(data.access_token){",
+                  "    pm.environment.set(\"ctp_access_token\", data.access_token);",
+                  "}",
+                  "if (data.scope) {",
+                  "    parts = data.scope.split(\" \");",
+                  "    parts = parts.filter(scope => scope.includes(\":\")).map(scope => scope.split(\":\"))",
+                  "    if (parts.length > 0) {",
+                  "        scopeParts = parts[0];",
+                  "        pm.environment.set(\"project-key\", scopeParts[1]);",
+                  "        parts = parts.filter(scope => scope.length >= 3)",
+                  "        if (parts.length > 0) {",
+                  "            scopeParts = parts[0];",
+                  "            pm.environment.set(\"store-key\", scopeParts[2]);",
+                  "        }",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "{{ctp-client-secret}}",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "{{ctp-client-id}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{auth_service_url}}/oauth/token?grant_type=client_credentials",
+              "host": [
+                "{{auth_service_url}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ],
+              "query": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "description": "Use this request to obtain an access token for your commercetools platform project via Client Credentials Flow. As a prerequisite you must have filled out environment variables in Postman for projectKey, client_id and client_secret to use this."
+          },
+          "response": []
+        }
+      ],
+      "description": "Authorization"
+    },
+    {
+      "name": "Checkout Session endpoints",
+      "item": [
+        {
+          "name": "Create checkout session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "tests[\"Status code is 201\"] = pm.response.code === 201;",
+                  "var data = JSON.parse(responseBody);",
+                  "if(data.id){",
+                  "    pm.environment.set(\"checkout-session-id\", data.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "yourtoken",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"buyer\": { // optional\n        \"first_name\": \"Paul\",\n        \"last_name\": \"Thetester\",\n        \"email\": \"paul.thetester@example.net\",\n        \"phone_number\": \"15558901212\"\n    },\n    \"items\": [ // optional\n        {\n            \"id\": \"34177305390\",\n            \"quantity\": 1\n        }\n    ],\n    \"fulfillment_address\": { // optional\n        \"name\": \"Paul Thetester\",\n        \"line_one\": \"Abbey Road 3\",\n        \"line_two\": \"its a line two info\",\n        \"city\": \"London\",\n        \"country\": \"US\",\n        \"postal_code\": \"NW8 0NW\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{chatgpt-acp-connector-service-host}}/checkout_sessions",
+              "host": [
+                "{{chatgpt-acp-connector-service-host}}"
+              ],
+              "path": [
+                "checkout_sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update checkout session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "tests[\"Status code is 201\"] = pm.response.code === 201;",
+                  "var data = JSON.parse(responseBody);",
+                  "if(data.id){",
+                  "    pm.environment.set(\"checkout-session-id\", data.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "yourtoken",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"buyer\": { // optional\n        \"first_name\": \"Paul\",\n        \"last_name\": \"Thetester\",\n        \"email\": \"paul.thetester@example.net\",\n        \"phone_number\": \"15558901212\"\n    },\n    \"items\": [ // optional\n        {\n            \"id\": \"34177305390\",\n            \"quantity\": 1\n        }\n    ],\n    \"fulfillment_option_id\": \"087e1d62-3ad5-4631-88bd-d632a439e6de\", // optioanl\n    \"fulfillment_address\": { // optional\n        \"name\": \"Paul Thetester\",\n        \"line_one\": \"Abbey Road 3\",\n        \"line_two\": \"its a line two info\",\n        \"city\": \"London\",\n        \"country\": \"US\",\n        \"postal_code\": \"NW8 0NW\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{chatgpt-acp-connector-service-host}}/checkout_sessions/{{checkout-session-id}}",
+              "host": [
+                "{{chatgpt-acp-connector-service-host}}"
+              ],
+              "path": [
+                "checkout_sessions",
+                "{{checkout-session-id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Complete checkout session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "tests[\"Status code is 201\"] = pm.response.code === 201;",
+                  "var data = JSON.parse(responseBody);",
+                  "if(data.id){",
+                  "    pm.environment.set(\"checkout-session-id\", data.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "yourtoken",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"payment_data\": {\n        \"token\": \"spt_1T08jxIHjzgyoETyLvq67VqT\",\n        \"provider\": \"stripe\",\n        \"billing_address\": {\n            \"name\": \"Andrew\",\n            \"line_one\": \"75\",\n            \"line_two\": \"State Street Boston\",\n            \"city\": \"Boston\",\n            \"state\": \"MA\",\n            \"postal_code\": \"02109\",\n            \"country\": \"US\"\n        }\n    },\n    \"buyer\": {\n        \"email\": \"s.jenkins@example.net\",\n        \"first_name\": \"Sarah\",\n        \"last_name\": \"Jenkins\",\n        \"phone_number\": \"987654321\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{chatgpt-acp-connector-service-host}}/checkout_sessions/{{checkout-session-id}}/complete",
+              "host": [
+                "{{chatgpt-acp-connector-service-host}}"
+              ],
+              "path": [
+                "checkout_sessions",
+                "{{checkout-session-id}}",
+                "complete"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel checkout session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "tests[\"Status code is 201\"] = pm.response.code === 201;",
+                  "var data = JSON.parse(responseBody);",
+                  "if(data.id){",
+                  "    pm.environment.set(\"checkout-session-id\", data.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{chatgpt-acp-connector-service-host}}/checkout_sessions/{{checkout-session-id}}/cancel",
+              "host": [
+                "{{chatgpt-acp-connector-service-host}}"
+              ],
+              "path": [
+                "checkout_sessions",
+                "{{checkout-session-id}}",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get checkout session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "tests[\"Status code is 201\"] = pm.response.code === 201;",
+                  "var data = JSON.parse(responseBody);",
+                  "if(data.id){",
+                  "    pm.environment.set(\"checkout-session-id\", data.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "yourtoken",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{chatgpt-acp-connector-service-host}}/checkout_sessions/{{checkout-session-id}}",
+              "host": [
+                "{{chatgpt-acp-connector-service-host}}"
+              ],
+              "path": [
+                "checkout_sessions",
+                "{{checkout-session-id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "oauth2",
+        "oauth2": [
+          {
+            "key": "addTokenTo",
+            "value": "header",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "Send Order Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n   \"items\": [\n       {\n           \"id\": \"M0E20000000DLCH\",\n           \"quantity\": 1\n       }\n   ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080"
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "chatgpt-acp-connector-event-host",
+      "value": ""
+    },
+    {
+      "key": "chatgpt-acp-connector-service-host",
+      "value": ""
+    },
+    {
+      "key": "auth_service_url",
+      "value": ""
+    },
+    {
+      "key": "ctp-client-id",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "ctp-client-secret",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
