@@ -70,7 +70,7 @@ export function ApiEntry({ entry }: { entry: ApiLogEntry }) {
                 onClick={() => setTab(t)}
                 className={`px-4 py-1.5 text-[11px] font-medium capitalize transition-colors ${
                   tab === t
-                    ? 'text-cyan-400 border-b-2 border-cyan-400 -mb-px'
+                    ? 'text-yellow-400 border-b-2 border-yellow-400 -mb-px'
                     : 'text-gray-500 hover:text-gray-300'
                 }`}
               >

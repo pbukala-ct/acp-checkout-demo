@@ -12,7 +12,7 @@ export function ProductCard({ product, onSelect }: Props) {
   return (
     <button
       onClick={() => onSelect(product)}
-      className="group w-44 rounded-xl bg-gray-800 border border-gray-700 hover:border-green-500 hover:bg-gray-750 transition-all text-left overflow-hidden focus:outline-none focus:ring-2 focus:ring-green-500"
+      className="group w-44 rounded-xl bg-gray-800 border border-gray-700 hover:border-yellow-400 hover:bg-gray-750 transition-all text-left overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400"
     >
       <div className="relative w-full h-36 bg-gray-700 overflow-hidden">
         <Image
@@ -30,7 +30,7 @@ export function ProductCard({ product, onSelect }: Props) {
       </div>
       <div className="p-3">
         <p className="text-xs font-medium text-gray-100 line-clamp-2 leading-snug">{product.name}</p>
-        <p className="text-sm font-bold text-green-400 mt-1">{product.price}</p>
+        <p className="text-sm font-bold text-yellow-400 mt-1">{product.price}</p>
       </div>
     </button>
   );

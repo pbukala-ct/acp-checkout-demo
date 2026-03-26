@@ -75,7 +75,7 @@ export function AddressForm({ onSubmit }: Props) {
           onChange={(e) => setData((d) => ({ ...d, [key]: e.target.value }))}
           className={`w-full bg-gray-700 text-gray-100 text-sm rounded-lg px-3 py-2 border ${
             errors[key] ? 'border-red-500' : 'border-gray-600'
-          } focus:outline-none focus:border-green-500`}
+          } focus:outline-none focus:border-yellow-400`}
         />
         {errors[key] && <p className="text-xs text-red-400 mt-1">{errors[key]}</p>}
       </div>
@@ -102,7 +102,7 @@ export function AddressForm({ onSubmit }: Props) {
       </div>
       <button
         type="submit"
-        className="mt-4 w-full bg-green-600 hover:bg-green-500 text-white font-semibold text-sm py-2.5 rounded-lg transition-colors"
+        className="mt-4 w-full bg-[#FFC82B] hover:bg-yellow-300 text-[#1a1a1a] font-semibold text-sm py-2.5 rounded-lg transition-colors"
       >
         Confirm Address
       </button>

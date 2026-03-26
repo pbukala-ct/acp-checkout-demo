@@ -28,17 +28,17 @@ export function ApiPanel({ open, onToggle, entries }: Props) {
       >
         {open ? (
           <span className="text-xs text-gray-400 font-mono flex items-center gap-2 px-3 w-full">
-            <span className="text-green-400">{'</>'}</span>
+            <span className="text-yellow-400">{'</>'}</span>
             <span className="text-gray-300 font-semibold">API Inspector</span>
             {entries.length > 0 && (
-              <span className="bg-green-700 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <span className="bg-[#FFC82B] text-[#1a1a1a] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                 {entries.length}
               </span>
             )}
             <span className="ml-auto text-gray-600">→</span>
           </span>
         ) : (
-          <span className="text-green-400 text-xs font-mono rotate-90 whitespace-nowrap">API</span>
+          <span className="text-yellow-400 text-xs font-mono rotate-90 whitespace-nowrap">API</span>
         )}
       </button>
 

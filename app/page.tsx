@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatThread, type ChatMessageType } from '@/components/ChatThread';
 import { ApiPanel } from '@/components/ApiPanel';
+import { CtLogo } from '@/components/CtLogo';
 import type { ApiLogEntry } from '@/components/ApiEntry';
 import type { DemoProduct } from '@/lib/seed-products';
 import type { AddressData } from '@/components/AddressForm';
@@ -284,7 +285,11 @@ export default function DemoPage() {
     <div className="flex flex-col h-screen bg-gray-950">
       {/* Header */}
       <header className="flex items-center gap-3 px-4 h-12 border-b border-gray-800 bg-gray-900 flex-shrink-0">
-        <span className="text-sm font-bold text-white">🛍️ ACP Checkout Demo</span>
+        <CtLogo size={28} />
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-sm font-semibold text-white">ACP Checkout Demo</span>
+          <span className="text-[10px] text-gray-500 font-mono">powered by commercetools</span>
+        </div>
         <div className="flex-1" />
 
         {/* Token status */}
@@ -292,10 +297,10 @@ export default function DemoPage() {
           <span
             className={`w-2 h-2 rounded-full ${
               tokenStatus === 'ready'
-                ? 'bg-green-400'
+                ? 'bg-[#FFC82B]'
                 : tokenStatus === 'unavailable'
                   ? 'bg-red-400'
-                  : 'bg-yellow-400 animate-pulse'
+                  : 'bg-gray-400 animate-pulse'
             }`}
           />
           <span className="text-gray-400">
@@ -336,7 +341,7 @@ export default function DemoPage() {
             <div className="px-4 py-3 border-t border-gray-800 flex-shrink-0">
               <button
                 onClick={handleBuy}
-                className="bg-green-600 hover:bg-green-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
+                className="bg-[#FFC82B] hover:bg-yellow-300 text-[#1a1a1a] font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
               >
                 🛒 Buy now
               </button>

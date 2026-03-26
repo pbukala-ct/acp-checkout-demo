@@ -20,7 +20,7 @@ export function AgentMessage({ content, typing = false }: Props) {
 
   return (
     <div className="flex items-start gap-3 max-w-2xl">
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white text-sm font-bold">
+      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#FFC82B] flex items-center justify-center text-[#1a1a1a] text-sm font-bold">
         A
       </div>
       <div className="bg-gray-800 rounded-2xl rounded-tl-sm px-4 py-3 text-gray-100 text-sm leading-relaxed min-h-[40px]">

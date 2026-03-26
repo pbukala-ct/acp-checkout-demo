@@ -42,7 +42,7 @@ export function ChatThread({ messages, onProductSelect, onAddressSubmit, formAct
         if (msg.role === 'user') {
           return (
             <div key={msg.id} className="flex justify-end">
-              <div className="bg-green-700 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm max-w-xs">
+              <div className="bg-[#FFC82B] text-[#1a1a1a] rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm max-w-xs font-medium">
                 {msg.content}
               </div>
             </div>
