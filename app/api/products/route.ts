@@ -47,7 +47,7 @@ export async function GET() {
       .filter((p): p is DemoProduct => p !== null);
 
     // Shuffle and pick 3-6
-    const shuffled = products.sort(() => Math.random() - 0.5).slice(0, 6);
+    const shuffled = products.sort(() => Math.random() - 0.5).slice(0, 10);
 
     if (shuffled.length < 3) {
       return NextResponse.json({ products: SEED_PRODUCTS, usedSeedData: true });
