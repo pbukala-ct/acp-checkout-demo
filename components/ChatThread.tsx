@@ -5,23 +5,39 @@ import { AgentMessage } from './AgentMessage';
 import { ProductCard } from './ProductCard';
 import { AddressForm, type AddressData } from './AddressForm';
 import { OrderConfirmation } from './OrderConfirmation';
+import { ShippingOptions } from './ShippingOptions';
+import { CartSummary } from './CartSummary';
 import type { DemoProduct } from '@/lib/seed-products';
+import type { FulfillmentOption } from '@/lib/fulfillment';
 
 export type ChatMessageType =
   | { id: string; role: 'agent'; content: string; typing?: boolean }
   | { id: string; role: 'user'; content: string }
   | { id: string; role: 'products'; products: DemoProduct[] }
   | { id: string; role: 'address-form' }
+  | { id: string; role: 'shipping-options'; options: FulfillmentOption[] }
+  | { id: string; role: 'cart-summary'; product: DemoProduct; shippingOption: FulfillmentOption }
   | { id: string; role: 'confirmation'; sessionId: string; productName: string };
 
 interface Props {
   messages: ChatMessageType[];
   onProductSelect: (product: DemoProduct) => void;
   onAddressSubmit: (data: AddressData) => void;
+  onShippingSelect: (option: FulfillmentOption) => void;
+  onCheckout: () => void;
   formActive: boolean;
+  checkoutLoading: boolean;
 }
 
-export function ChatThread({ messages, onProductSelect, onAddressSubmit, formActive }: Props) {
+export function ChatThread({
+  messages,
+  onProductSelect,
+  onAddressSubmit,
+  onShippingSelect,
+  onCheckout,
+  formActive,
+  checkoutLoading,
+}: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,6 +79,27 @@ export function ChatThread({ messages, onProductSelect, onAddressSubmit, formAct
           return (
             <div key={msg.id}>
               {formActive && <AddressForm onSubmit={onAddressSubmit} />}
+            </div>
+          );
+        }
+
+        if (msg.role === 'shipping-options') {
+          return (
+            <div key={msg.id}>
+              <ShippingOptions options={msg.options} onSelect={onShippingSelect} />
+            </div>
+          );
+        }
+
+        if (msg.role === 'cart-summary') {
+          return (
+            <div key={msg.id}>
+              <CartSummary
+                product={msg.product}
+                shippingOption={msg.shippingOption}
+                onCheckout={onCheckout}
+                loading={checkoutLoading}
+              />
             </div>
           );
         }
