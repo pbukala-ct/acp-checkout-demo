@@ -1,6 +1,5 @@
 export interface DemoProduct {
   id: string;
-  key?: string;
   name: string;
   price: string;
   imageUrl: string;
