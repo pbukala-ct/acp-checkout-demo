@@ -142,7 +142,7 @@ export default function DemoPage() {
         email: data.email,
         phone_number: data.phone,
       },
-      items: [{ sku: selectedProduct.sku ?? selectedProduct.id, quantity: 1 }],
+      items: [{ id: selectedProduct.key ?? selectedProduct.sku ?? selectedProduct.id, quantity: 1 }],
       fulfillmentAddress: {
         name: `${data.firstName} ${data.lastName}`,
         line_one: data.lineOne,

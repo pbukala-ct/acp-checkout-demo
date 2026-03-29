@@ -25,7 +25,7 @@ export async function GET() {
       })
       .execute();
 
-    const products: DemoProduct[] = body.results
+    const products = body.results
       .map((p) => {
         const name = getLocalized(p.name);
         const description = getLocalized(p.description);
@@ -37,6 +37,7 @@ export async function GET() {
 
         return {
           id: p.id,
+          key: p.key,
           name,
           description: description || `${name} — available at John Lewis`,
           price: priceStr,
@@ -44,7 +45,7 @@ export async function GET() {
           sku: p.masterVariant.sku ?? p.id,
         } satisfies DemoProduct;
       })
-      .filter((p): p is DemoProduct => p !== null);
+      .filter((p): p is NonNullable<typeof p> => p !== null) as DemoProduct[];
 
     // Shuffle and pick 3-6
     const shuffled = products.sort(() => Math.random() - 0.5).slice(0, 10);
