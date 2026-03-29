@@ -360,11 +360,11 @@ export default function DemoPage() {
   return (
     <div className="flex flex-col h-screen bg-gray-950">
       {/* Header */}
-      <header className="flex items-center gap-3 px-4 h-12 border-b border-gray-800 bg-gray-900 flex-shrink-0">
-        <CtLogo size={28} />
+      <header className="flex items-center gap-3 px-4 h-14 border-b border-gray-700 bg-gray-900 flex-shrink-0 shadow-md">
+        <CtLogo size={30} />
         <div className="flex items-center gap-2">
           <div className="flex items-baseline gap-1.5">
-            <span className="text-sm font-semibold text-white">ACP Checkout Demo</span>
+            <span className="text-sm font-bold text-white tracking-tight">ACP Checkout Demo</span>
             <span className="text-[10px] text-gray-500 font-mono">powered by commercetools</span>
           </div>
           {process.env.CTP_PROJECT_KEY && (
@@ -404,7 +404,11 @@ export default function DemoPage() {
         <button
           onClick={handleReset}
           disabled={isBusy}
-          className="text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 px-2.5 py-1 rounded-lg transition-colors disabled:opacity-40"
+          className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all disabled:opacity-40 ${
+            flowState === 'CONFIRMED' || flowState === 'ERROR'
+              ? 'bg-red-600 hover:bg-red-500 text-white border border-red-500 animate-pulse'
+              : 'text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500'
+          }`}
         >
           ↺ Reset
         </button>
