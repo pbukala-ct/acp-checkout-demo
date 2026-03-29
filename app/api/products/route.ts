@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import { apiRoot } from '@/lib/ct/client';
 import { SEED_PRODUCTS, type DemoProduct } from '@/lib/seed-products';
 
-function formatPrice(centAmount: number, currency: string): string {
-  const symbol = currency === 'GBP' ? '£' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency;
-  return `${symbol}${(centAmount / 100).toFixed(2)}`;
+function formatPrice(centAmount: number): string {
+  return `$${(centAmount / 100).toFixed(2)}`;
 }
 
 function getLocalized(obj: Record<string, string> | undefined): string {
@@ -31,7 +30,7 @@ export async function GET() {
         const description = getLocalized(p.description);
         const image = p.masterVariant.images?.[0]?.url ?? '';
         const price = p.masterVariant.prices?.[0]?.value;
-        const priceStr = price ? formatPrice(price.centAmount, price.currencyCode) : '';
+        const priceStr = price ? formatPrice(price.centAmount) : '';
 
         if (!name || !priceStr) return null;
 
