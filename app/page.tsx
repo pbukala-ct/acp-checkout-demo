@@ -412,7 +412,7 @@ export default function DemoPage() {
         {sessionId && (
           <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-700 bg-gray-800">
             <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Session</span>
-            <span className="text-xs text-gray-300 font-mono">{sessionId.slice(0, 8)}…</span>
+            <span className="text-xs text-gray-300 font-mono">{sessionId}</span>
           </div>
         )}
 

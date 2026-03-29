@@ -43,15 +43,43 @@ export function ApiPanel({ open, onToggle, entries }: Props) {
       </button>
 
       {open && (
-        <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-950">
-          {entries.length === 0 ? (
-            <p className="text-xs text-gray-600 text-center mt-8 font-mono">
-              API calls will appear here as the demo progresses
-            </p>
-          ) : (
-            entries.map((e, i) => <ApiEntry key={i} entry={e} />)
+        <div className="flex flex-col flex-1 overflow-hidden bg-gray-950">
+          {/* Summary strip */}
+          {entries.length > 0 && (
+            <div className="flex-shrink-0 border-b border-gray-800 px-3 py-2 flex flex-wrap gap-1.5">
+              {entries.map((e, i) => {
+                const path = e.url.replace(/^https?:\/\/[^/]+/, '') || '/';
+                const label = path.split('/').filter(Boolean).pop() ?? path;
+                const statusColor =
+                  e.isError ? 'text-red-400' :
+                  e.status >= 400 ? 'text-orange-400' :
+                  e.status >= 200 ? 'text-green-400' : 'text-gray-400';
+                return (
+                  <span
+                    key={i}
+                    className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-800 border border-gray-700 text-[10px] font-mono"
+                    title={e.url}
+                  >
+                    <span className="text-gray-500">{e.method}</span>
+                    <span className="text-gray-300 truncate max-w-[80px]">{label}</span>
+                    <span className={`font-bold ${statusColor}`}>{e.status}</span>
+                  </span>
+                );
+              })}
+            </div>
           )}
-          <div ref={bottomRef} />
+
+          {/* Entries list */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            {entries.length === 0 ? (
+              <p className="text-xs text-gray-600 text-center mt-8 font-mono">
+                API calls will appear here as the demo progresses
+              </p>
+            ) : (
+              entries.map((e, i) => <ApiEntry key={i} entry={e} />)
+            )}
+            <div ref={bottomRef} />
+          </div>
         </div>
       )}
     </div>
