@@ -14,8 +14,6 @@ import type { FulfillmentOption } from '@/lib/fulfillment';
 // ---------------------------------------------------------------------------
 const SCRIPT = {
   intro: "Hi! I'm your AI shopping assistant. Here are some products I found for you — tap one to learn more.",
-  productSelected: (name: string) =>
-    `Great choice! "${name}" looks perfect. I can help you purchase this right now.`,
   addressRequest: "I'll need your shipping details to complete the order. Please fill in the form below.",
   creatingSession: 'Let me set up your checkout session and fetch available delivery options…',
   shippingOptions: (count: number) =>
@@ -36,7 +34,6 @@ const SCRIPT = {
 type FlowState =
   | 'LOADING'
   | 'BROWSING'
-  | 'PRODUCT_SELECTED'
   | 'COLLECTING_ADDRESS'
   | 'CREATING_SESSION'
   | 'SELECTING_SHIPPING'
@@ -110,23 +107,13 @@ export default function DemoPage() {
   }, []);
 
   // -----------------------------------------------------------------------
-  // Product selected
+  // Buy now (from product tile — merges select + buy into one action)
   // -----------------------------------------------------------------------
-  const handleProductSelect = useCallback((product: DemoProduct) => {
+  const handleBuyNow = useCallback((product: DemoProduct) => {
     if (flowState !== 'BROWSING') return;
     setSelectedProduct(product);
-    setFlowState('PRODUCT_SELECTED');
-    addMsg(userMsg(`I'd like to buy: ${product.name}`));
-    addMsg(agentMsg(SCRIPT.productSelected(product.name)));
-  }, [flowState, addMsg]);
-
-  // -----------------------------------------------------------------------
-  // Buy clicked
-  // -----------------------------------------------------------------------
-  const handleBuy = useCallback(() => {
-    if (flowState !== 'PRODUCT_SELECTED') return;
     setFlowState('COLLECTING_ADDRESS');
-    addMsg(userMsg('Buy now'));
+    addMsg({ id: nextId(), role: 'product-detail', product });
     addMsg(agentMsg(SCRIPT.addressRequest));
     setTimeout(() => {
       setMessages((prev) => [...prev, { id: nextId(), role: 'address-form' }]);
@@ -345,7 +332,6 @@ export default function DemoPage() {
   // -----------------------------------------------------------------------
   // Render
   // -----------------------------------------------------------------------
-  const showBuyButton = flowState === 'PRODUCT_SELECTED';
   const isBusy = ['CREATING_SESSION', 'UPDATING_SESSION', 'COMPLETING', 'LOADING'].includes(flowState);
   const busyLabel: Record<string, string> = {
     LOADING: 'Loading products…',
@@ -359,14 +345,16 @@ export default function DemoPage() {
       {/* Header */}
       <header className="flex items-center gap-3 px-4 h-12 border-b border-gray-800 bg-gray-900 flex-shrink-0">
         <CtLogo size={28} />
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-sm font-semibold text-white">ACP Checkout Demo</span>
-          <span className="text-[10px] text-gray-500 font-mono">
-            powered by commercetools
-            {process.env.CTP_PROJECT_KEY && (
-              <span className="ml-1 text-gray-600">· {process.env.CTP_PROJECT_KEY}</span>
-            )}
-          </span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-sm font-semibold text-white">ACP Checkout Demo</span>
+            <span className="text-[10px] text-gray-500 font-mono">powered by commercetools</span>
+          </div>
+          {process.env.CTP_PROJECT_KEY && (
+            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-gray-800 text-[#FFC82B] border border-gray-700">
+              {process.env.CTP_PROJECT_KEY}
+            </span>
+          )}
         </div>
         <div className="flex-1" />
 
@@ -411,24 +399,13 @@ export default function DemoPage() {
         <div className="flex flex-col flex-1 overflow-hidden">
           <ChatThread
             messages={messages}
-            onProductSelect={handleProductSelect}
+            onBuyNow={handleBuyNow}
             onAddressSubmit={handleAddressSubmit}
             onShippingSelect={handleShippingSelect}
             onCheckout={handleCheckout}
             formActive={formActive}
             checkoutLoading={checkoutLoading}
           />
-
-          {showBuyButton && (
-            <div className="px-4 py-3 border-t border-gray-800 flex-shrink-0">
-              <button
-                onClick={handleBuy}
-                className="bg-[#FFC82B] hover:bg-yellow-300 text-[#1a1a1a] font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
-              >
-                🛒 Buy now
-              </button>
-            </div>
-          )}
 
           {isBusy && (
             <div className="px-4 py-2 flex-shrink-0">
