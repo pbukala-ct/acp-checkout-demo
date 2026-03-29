@@ -317,12 +317,14 @@ export default function DemoPage() {
   // -----------------------------------------------------------------------
   const handleReset = useCallback(async () => {
     const sid = sessionIdRef.current;
+    sessionIdRef.current = null;
     if (sid) {
-      fetch(`/api/acp/sessions/${sid}/cancel`, { method: 'POST' })
-        .then((r) => r.json())
-        .then((d) => { if (d.apiEntry) addApiEntry(d.apiEntry as ApiLogEntry); })
-        .catch(() => {});
-      sessionIdRef.current = null;
+      // Await the cancel so the cart is unfrozen on CT before we allow a new session
+      try {
+        const r = await fetch(`/api/acp/sessions/${sid}/cancel`, { method: 'POST' });
+        const d = await r.json();
+        if (d.apiEntry) addApiEntry(d.apiEntry as ApiLogEntry);
+      } catch {}
     }
 
     setFlowState('LOADING');
