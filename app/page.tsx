@@ -378,9 +378,15 @@ export default function DemoPage() {
         <div className="flex-1" />
 
         {/* Token status */}
-        <div className="flex items-center gap-1.5 text-xs">
+        <div className={`flex items-center gap-2 px-2.5 py-1 rounded-lg border ${
+          tokenStatus === 'ready'
+            ? 'border-yellow-500/40 bg-yellow-500/10'
+            : tokenStatus === 'unavailable'
+              ? 'border-red-500/40 bg-red-500/10'
+              : 'border-gray-700 bg-gray-800'
+        }`}>
           <span
-            className={`w-2 h-2 rounded-full ${
+            className={`w-2 h-2 rounded-full flex-shrink-0 ${
               tokenStatus === 'ready'
                 ? 'bg-[#FFC82B]'
                 : tokenStatus === 'unavailable'
@@ -388,7 +394,13 @@ export default function DemoPage() {
                   : 'bg-gray-400 animate-pulse'
             }`}
           />
-          <span className="text-gray-400">
+          <span className={`text-xs font-medium ${
+            tokenStatus === 'ready'
+              ? 'text-yellow-300'
+              : tokenStatus === 'unavailable'
+                ? 'text-red-400'
+                : 'text-gray-400'
+          }`}>
             {tokenStatus === 'ready'
               ? 'Payment ready'
               : tokenStatus === 'unavailable'
@@ -398,9 +410,10 @@ export default function DemoPage() {
         </div>
 
         {sessionId && (
-          <span className="text-[10px] text-gray-600 font-mono hidden sm:block">
-            Session: {sessionId.slice(0, 8)}…
-          </span>
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-700 bg-gray-800">
+            <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wide">Session</span>
+            <span className="text-xs text-gray-300 font-mono">{sessionId.slice(0, 8)}…</span>
+          </div>
         )}
 
         <button
