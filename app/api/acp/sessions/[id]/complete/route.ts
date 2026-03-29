@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCTAccessToken } from '@/lib/acp-token';
-import { getStripeToken } from '@/lib/stripe-token';
+import { getStripeToken, clearTokenCache } from '@/lib/stripe-token';
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -44,6 +44,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     },
     body: JSON.stringify(requestBody),
   });
+
+  // Granted tokens are single-use — clear cache so next checkout gets a fresh token
+  clearTokenCache();
 
   const responseBody = await acpResponse.json().catch(() => ({}));
 
