@@ -361,7 +361,12 @@ export default function DemoPage() {
         <CtLogo size={28} />
         <div className="flex items-baseline gap-1.5">
           <span className="text-sm font-semibold text-white">ACP Checkout Demo</span>
-          <span className="text-[10px] text-gray-500 font-mono">powered by commercetools</span>
+          <span className="text-[10px] text-gray-500 font-mono">
+            powered by commercetools
+            {process.env.CTP_PROJECT_KEY && (
+              <span className="ml-1 text-gray-600">· {process.env.CTP_PROJECT_KEY}</span>
+            )}
+          </span>
         </div>
         <div className="flex-1" />
 

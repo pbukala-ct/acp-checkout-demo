@@ -32,6 +32,7 @@ const STATUS_COLOR = (status: number) => {
 export function ApiEntry({ entry }: { entry: ApiLogEntry }) {
   const [expanded, setExpanded] = useState(true);
   const [tab, setTab] = useState<'response' | 'request'>('response');
+  const [fullHeight, setFullHeight] = useState(false);
 
   const host = entry.url.match(/^https?:\/\/([^/]+)/)?.[1] ?? '';
   const path = entry.url.replace(/^https?:\/\/[^/]+/, '') || '/';
@@ -83,7 +84,7 @@ export function ApiEntry({ entry }: { entry: ApiLogEntry }) {
           </div>
 
           {/* Content */}
-          <div className="p-3 max-h-80 overflow-y-auto">
+          <div className={`p-3 overflow-y-auto ${fullHeight ? '' : 'max-h-80'}`}>
             {tab === 'request' ? (
               entry.requestBody !== null ? (
                 <JsonViewer data={entry.requestBody} />
@@ -94,6 +95,12 @@ export function ApiEntry({ entry }: { entry: ApiLogEntry }) {
               <JsonViewer data={entry.responseBody} />
             )}
           </div>
+          <button
+            onClick={() => setFullHeight((v) => !v)}
+            className="w-full py-1 text-[10px] text-gray-600 hover:text-gray-400 hover:bg-gray-800/40 transition-colors border-t border-gray-800/60 font-mono"
+          >
+            {fullHeight ? '▲ collapse' : '▼ expand'}
+          </button>
         </div>
       )}
     </div>
