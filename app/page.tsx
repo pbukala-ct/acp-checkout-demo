@@ -25,6 +25,7 @@ const SCRIPT = {
   errorSession: (msg: string) => `Something went wrong creating your session: ${msg}. Please try again.`,
   errorUpdate: (msg: string) => `Couldn't apply that shipping option: ${msg}. Please try again.`,
   errorComplete: (msg: string) => `Payment processing failed: ${msg}. Please try resetting and trying again.`,
+  frozenCart: 'The checkout session has expired or the cart is in an invalid state. Please use the ↺ Reset button to start a new order.',
   noShipping: 'No delivery options were returned. Please try resetting the demo.',
 };
 
@@ -189,6 +190,16 @@ export default function DemoPage() {
   }, [selectedProduct, addMsg, addApiEntry]);
 
   // -----------------------------------------------------------------------
+  // Best-effort cancel of the active ACP session (fire-and-forget)
+  // -----------------------------------------------------------------------
+  const cancelActiveSession = useCallback(() => {
+    const sid = sessionIdRef.current;
+    if (!sid) return;
+    sessionIdRef.current = null;
+    fetch(`/api/acp/sessions/${sid}/cancel`, { method: 'POST' }).catch(() => {});
+  }, []);
+
+  // -----------------------------------------------------------------------
   // Shipping option selected → update session → show cart summary
   // -----------------------------------------------------------------------
   const handleShippingSelect = useCallback(async (option: FulfillmentOption) => {
@@ -212,6 +223,7 @@ export default function DemoPage() {
       if (json.apiEntry) addApiEntry(json.apiEntry as ApiLogEntry);
 
       if (!res.ok) {
+        cancelActiveSession();
         addMsg(agentMsg(SCRIPT.errorUpdate(json.error ?? 'Unknown error')));
         setFlowState('ERROR');
         return;
@@ -224,10 +236,11 @@ export default function DemoPage() {
         { id: nextId(), role: 'cart-summary', product: selectedProduct, shippingOption: option },
       ]);
     } catch (err) {
+      cancelActiveSession();
       addMsg(agentMsg(SCRIPT.errorUpdate(String(err))));
       setFlowState('ERROR');
     }
-  }, [flowState, selectedProduct, addMsg, addApiEntry]);
+  }, [flowState, selectedProduct, addMsg, addApiEntry, cancelActiveSession]);
 
   // -----------------------------------------------------------------------
   // Checkout clicked → complete session
@@ -270,7 +283,10 @@ export default function DemoPage() {
       if (json.apiEntry) addApiEntry(json.apiEntry as ApiLogEntry);
 
       if (!res.ok) {
-        addMsg(agentMsg(SCRIPT.errorComplete(json.error ?? 'Unknown error')));
+        cancelActiveSession();
+        const errMsg = json.error ?? '';
+        const isFrozenCart = /frozen cart|invalid state/i.test(errMsg);
+        addMsg(agentMsg(isFrozenCart ? SCRIPT.frozenCart : SCRIPT.errorComplete(errMsg || 'Unknown error')));
         setFlowState('ERROR');
         setCheckoutLoading(false);
         return;
@@ -288,12 +304,13 @@ export default function DemoPage() {
       ]);
       setFlowState('CONFIRMED');
     } catch (err) {
+      cancelActiveSession();
       addMsg(agentMsg(SCRIPT.errorComplete(String(err))));
       setFlowState('ERROR');
     } finally {
       setCheckoutLoading(false);
     }
-  }, [flowState, addressData, addMsg, addApiEntry, selectedProduct]);
+  }, [flowState, addressData, addMsg, addApiEntry, selectedProduct, cancelActiveSession]);
 
   // -----------------------------------------------------------------------
   // Reset demo
