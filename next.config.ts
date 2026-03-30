@@ -1,9 +1,5 @@
 import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
-  env: {
-    CTP_PROJECT_KEY: process.env.CTP_PROJECT_KEY,
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

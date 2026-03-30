@@ -72,6 +72,7 @@ export default function DemoPage() {
   const [tokenStatus, setTokenStatus] = useState<'loading' | 'ready' | 'unavailable'>('loading');
   const [formActive, setFormActive] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [ctpProjectKey, setCtpProjectKey] = useState<string | null>(null);
   const sessionIdRef = useRef<string | null>(null);
   const addressDataRef = useRef<AddressData | null>(null);
 
@@ -92,6 +93,11 @@ export default function DemoPage() {
         .then((r) => r.json())
         .then((d) => setTokenStatus(d.ready ? 'ready' : 'unavailable'))
         .catch(() => setTokenStatus('unavailable'));
+
+      fetch('/api/config')
+        .then((r) => r.json())
+        .then((d) => setCtpProjectKey(d.ctpProjectKey ?? null))
+        .catch(() => {});
 
       try {
         const res = await fetch('/api/products');
@@ -369,9 +375,9 @@ export default function DemoPage() {
             <span className="text-sm font-bold text-white tracking-tight">ACP Checkout Demo</span>
             <span className="text-[10px] text-gray-500 font-mono">powered by commercetools</span>
           </div>
-          {process.env.CTP_PROJECT_KEY && (
+          {ctpProjectKey && (
             <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-gray-800 text-[#FFC82B] border border-gray-700">
-              {process.env.CTP_PROJECT_KEY}
+              {ctpProjectKey}
             </span>
           )}
         </div>
