@@ -3,6 +3,13 @@
 import { useState } from 'react';
 import { JsonViewer } from './JsonViewer';
 
+export interface ApiCallContext {
+  stepName: string;
+  description: string;
+  system: string;
+  specRef?: string;
+}
+
 export interface ApiLogEntry {
   method: string;
   url: string;
@@ -11,6 +18,7 @@ export interface ApiLogEntry {
   responseBody: unknown;
   isError: boolean;
   timestamp: string;
+  context?: ApiCallContext;
 }
 
 const METHOD_COLOR: Record<string, string> = {
@@ -63,6 +71,29 @@ export function ApiEntry({ entry }: { entry: ApiLogEntry }) {
 
       {expanded && (
         <div className="bg-gray-950/80 border-t border-gray-800/60">
+          {/* Protocol context banner */}
+          {entry.context && (
+            <div className="px-3 py-2.5 border-b border-gray-800/60 bg-gray-900/60">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wide bg-[#FFC82B]/20 text-[#FFC82B] border border-[#FFC82B]/30">
+                  {entry.context.system}
+                </span>
+                <span className="text-xs font-semibold text-gray-200">{entry.context.stepName}</span>
+              </div>
+              <p className="text-[11px] text-gray-400 leading-relaxed">{entry.context.description}</p>
+              {entry.context.specRef && (
+                <a
+                  href={entry.context.specRef}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-1 text-[10px] text-blue-400 hover:text-blue-300 underline underline-offset-2"
+                >
+                  Spec reference ↗
+                </a>
+              )}
+            </div>
+          )}
+
           {/* Tabs */}
           <div className="flex border-b border-gray-800/60">
             {(['response', 'request'] as const).map((t) => (

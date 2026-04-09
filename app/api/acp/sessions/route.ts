@@ -42,6 +42,13 @@ export async function POST(req: NextRequest) {
     responseBody,
     isError: !acpResponse.ok,
     timestamp: new Date().toISOString(),
+    context: {
+      stepName: 'ACP Step 1 — Create Session',
+      system: 'commercetools ACP',
+      description:
+        'Initialises a new checkout session with buyer information, line items, and fulfilment address. ' +
+        'commercetools ACP validates the cart, reserves inventory, and returns the available shipping options for the buyer to choose from.',
+    },
   };
 
   if (!acpResponse.ok) {

@@ -91,6 +91,12 @@ export function ApiPanel({ open, onToggle, entries }: Props) {
                       <span className="text-xs font-semibold text-gray-200 flex-1 min-w-0 truncate">
                         {businessName}
                       </span>
+                      {/* System badge */}
+                      {e.context?.system && (
+                        <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-semibold bg-[#FFC82B]/15 text-[#FFC82B] border border-[#FFC82B]/25 hidden lg:inline-block truncate max-w-[110px]" title={e.context.system}>
+                          {e.context.system}
+                        </span>
+                      )}
                       {/* Endpoint path */}
                       <span className="text-[10px] text-gray-600 font-mono truncate max-w-[120px] hidden lg:block" title={path}>
                         {path}

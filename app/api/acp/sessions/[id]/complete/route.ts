@@ -58,6 +58,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     responseBody,
     isError: !acpResponse.ok,
     timestamp: new Date().toISOString(),
+    context: {
+      stepName: 'ACP Step 3 — Place Order',
+      system: 'commercetools ACP + Stripe',
+      description:
+        'Finalises the checkout session. A single-use Stripe payment token (obtained server-side via the Stripe Issuing API) ' +
+        'is submitted alongside buyer details and billing address. commercetools ACP authorises the payment through Stripe and converts the session into a confirmed order.',
+    },
   };
 
   if (!acpResponse.ok) {

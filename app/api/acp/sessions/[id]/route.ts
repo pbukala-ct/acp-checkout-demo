@@ -74,6 +74,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     responseBody,
     isError: !acpResponse.ok,
     timestamp: new Date().toISOString(),
+    context: {
+      stepName: 'ACP Step 2 — Select Shipping',
+      system: 'commercetools ACP',
+      description:
+        'Applies the buyer\'s chosen fulfilment option to the active checkout session. ' +
+        'commercetools ACP updates the session with the selected delivery method and recalculates the order total including shipping costs.',
+    },
   };
 
   return NextResponse.json({ responseBody, apiEntry });

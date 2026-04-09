@@ -32,6 +32,13 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     responseBody,
     isError: !acpResponse.ok,
     timestamp: new Date().toISOString(),
+    context: {
+      stepName: 'ACP — Cancel Session',
+      system: 'commercetools ACP',
+      description:
+        'Terminates the active checkout session and unfreezes the associated commercetools cart, ' +
+        'returning it to an editable state so a new checkout attempt can be started.',
+    },
   };
 
   return NextResponse.json({ apiEntry });
