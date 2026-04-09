@@ -29,11 +29,6 @@ interface Props {
   onCheckout: () => void;
   formActive: boolean;
   checkoutLoading: boolean;
-  isBrowsing: boolean;
-  filterCheckout: boolean;
-  filterSearch: boolean;
-  onFilterCheckoutChange: (v: boolean) => void;
-  onFilterSearchChange: (v: boolean) => void;
 }
 
 export function ChatThread({
@@ -44,11 +39,6 @@ export function ChatThread({
   onCheckout,
   formActive,
   checkoutLoading,
-  isBrowsing,
-  filterCheckout,
-  filterSearch,
-  onFilterCheckoutChange,
-  onFilterSearchChange,
 }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -78,47 +68,11 @@ export function ChatThread({
         }
 
         if (msg.role === 'products') {
-          const filtered = msg.products.filter((p) => {
-            if (filterCheckout && !p.enable_checkout) return false;
-            if (filterSearch && !p.enable_search) return false;
-            return true;
-          });
           return (
-            <div key={msg.id}>
-              {isBrowsing && (
-                <div className="flex items-center gap-4 mb-3 px-1 py-2 rounded-lg bg-gray-900 border border-gray-700">
-                  <span className="text-[11px] text-gray-500 font-medium uppercase tracking-wide pl-1">Filter</span>
-                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={filterCheckout}
-                      onChange={(e) => onFilterCheckoutChange(e.target.checked)}
-                      className="accent-[#FFC82B] w-3.5 h-3.5"
-                    />
-                    <span className="text-xs text-gray-300">Checkout enabled</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={filterSearch}
-                      onChange={(e) => onFilterSearchChange(e.target.checked)}
-                      className="accent-[#FFC82B] w-3.5 h-3.5"
-                    />
-                    <span className="text-xs text-gray-300">Search enabled</span>
-                  </label>
-                </div>
-              )}
-              {filtered.length === 0 ? (
-                <div className="flex items-center justify-center py-8 px-4 rounded-xl border border-dashed border-gray-700 text-gray-500 text-sm">
-                  No products match the selected filters
-                </div>
-              ) : (
-                <div className="flex gap-3 flex-wrap">
-                  {filtered.map((p) => (
-                    <ProductCard key={p.id} product={p} onBuyNow={onBuyNow} />
-                  ))}
-                </div>
-              )}
+            <div key={msg.id} className="flex gap-3 flex-wrap">
+              {msg.products.map((p) => (
+                <ProductCard key={p.id} product={p} onBuyNow={onBuyNow} />
+              ))}
             </div>
           );
         }

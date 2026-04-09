@@ -73,8 +73,6 @@ export default function DemoPage() {
   const [formActive, setFormActive] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [ctpProjectKey, setCtpProjectKey] = useState<string | null>(null);
-  const [filterCheckout, setFilterCheckout] = useState(false);
-  const [filterSearch, setFilterSearch] = useState(false);
   const sessionIdRef = useRef<string | null>(null);
   const addressDataRef = useRef<AddressData | null>(null);
 
@@ -342,8 +340,6 @@ export default function DemoPage() {
     setSelectedShipping(null);
     setFormActive(false);
     setCheckoutLoading(false);
-    setFilterCheckout(false);
-    setFilterSearch(false);
     setMessages([]);
     setApiLog([]);
 
@@ -451,11 +447,6 @@ export default function DemoPage() {
             onCheckout={handleCheckout}
             formActive={formActive}
             checkoutLoading={checkoutLoading}
-            isBrowsing={flowState === 'BROWSING'}
-            filterCheckout={filterCheckout}
-            filterSearch={filterSearch}
-            onFilterCheckoutChange={setFilterCheckout}
-            onFilterSearchChange={setFilterSearch}
           />
 
           {isBusy && (
