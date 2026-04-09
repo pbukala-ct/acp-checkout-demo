@@ -41,6 +41,26 @@ export function ProductCard({ product, onBuyNow }: Props) {
         <p className="text-sm font-bold text-yellow-400 mt-1">{product.price}</p>
       </div>
 
+      {/* Feature flag badges */}
+      <div className="px-3 pb-2 flex gap-1.5 flex-wrap">
+        <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded border ${
+          product.enable_checkout
+            ? 'bg-green-500/15 text-green-400 border-green-500/30'
+            : 'bg-gray-700/50 text-gray-500 border-gray-600/40'
+        }`}>
+          <span>Checkout</span>
+          <span className="font-bold">{product.enable_checkout ? 'ON' : 'OFF'}</span>
+        </span>
+        <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded border ${
+          product.enable_search
+            ? 'bg-green-500/15 text-green-400 border-green-500/30'
+            : 'bg-gray-700/50 text-gray-500 border-gray-600/40'
+        }`}>
+          <span>Search</span>
+          <span className="font-bold">{product.enable_search ? 'ON' : 'OFF'}</span>
+        </span>
+      </div>
+
       {/* Buy now button — always rendered, visible on hover */}
       <div className="px-3 pb-3">
         <button

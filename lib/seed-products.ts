@@ -6,6 +6,8 @@ export interface DemoProduct {
   description: string;
   sku: string;
   isDemoData?: boolean;
+  enable_checkout: boolean;
+  enable_search: boolean;
 }
 
 export const SEED_PRODUCTS: DemoProduct[] = [
@@ -17,6 +19,8 @@ export const SEED_PRODUCTS: DemoProduct[] = [
     imageUrl: 'https://placehold.co/400x400/1e293b/94a3b8?text=Bath+Towel',
     description: 'Supremely soft and absorbent bath towel crafted from 100% Egyptian cotton.',
     isDemoData: true,
+    enable_checkout: true,
+    enable_search: true,
   },
   {
     id: 'seed-002',
@@ -26,6 +30,8 @@ export const SEED_PRODUCTS: DemoProduct[] = [
     imageUrl: 'https://placehold.co/400x400/1e293b/94a3b8?text=Jug+Kettle',
     description: 'Stylish and efficient 1.7-litre jug kettle with rapid boil and quiet operation.',
     isDemoData: true,
+    enable_checkout: true,
+    enable_search: false,
   },
   {
     id: 'seed-003',
@@ -35,6 +41,8 @@ export const SEED_PRODUCTS: DemoProduct[] = [
     imageUrl: 'https://placehold.co/400x400/1e293b/94a3b8?text=Velvet+Cushion',
     description: 'Luxurious velvet cushion with feather pad filling in a rich teal colourway.',
     isDemoData: true,
+    enable_checkout: false,
+    enable_search: true,
   },
   {
     id: 'seed-004',
@@ -44,6 +52,8 @@ export const SEED_PRODUCTS: DemoProduct[] = [
     imageUrl: 'https://placehold.co/400x400/1e293b/94a3b8?text=Table+Lamp',
     description: 'Contemporary table lamp with a brushed brass finish and white fabric shade.',
     isDemoData: true,
+    enable_checkout: true,
+    enable_search: true,
   },
   {
     id: 'seed-005',
@@ -53,5 +63,7 @@ export const SEED_PRODUCTS: DemoProduct[] = [
     imageUrl: 'https://placehold.co/400x400/1e293b/94a3b8?text=Duvet',
     description: 'A classic all-season duvet filled with natural duck feather and down for warmth and comfort.',
     isDemoData: true,
+    enable_checkout: false,
+    enable_search: false,
   },
 ];

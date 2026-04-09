@@ -41,7 +41,9 @@ export async function GET() {
           price: priceStr,
           imageUrl: image || 'https://placehold.co/400x400/1e293b/94a3b8?text=Product',
           sku: p.masterVariant.sku ?? p.id,
-        } satisfies DemoProduct;
+          enable_checkout: true as boolean,
+          enable_search: true as boolean,
+        };
       })
       .filter((p): p is DemoProduct => p !== null);
 
