@@ -26,7 +26,7 @@ export async function getStripeToken(): Promise<string> {
       payment_method: 'pm_card_visa',
       'usage_limits[currency]': 'usd',
       'usage_limits[max_amount]': '150000',
-      'usage_limits[expires_at]': '1775847620',
+      'usage_limits[expires_at]': String(Math.floor((Date.now() + 30 * 24 * 60 * 60 * 1000) / 1000)),
     }),
   });
 
